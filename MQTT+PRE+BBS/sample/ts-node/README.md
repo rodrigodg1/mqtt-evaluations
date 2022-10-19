@@ -1,4 +1,4 @@
-# BBS-MQTT-TLS
+# BBS-MQTT-PRE
 
 The publisher sends a document (inputDocument) to the server with the following items to the "signature_data" topic:
 
