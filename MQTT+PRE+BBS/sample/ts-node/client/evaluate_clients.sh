@@ -19,15 +19,15 @@ rm -rf evaluation/end*
 python3 broker-reencription-subB.py &
 
 
-echo "Starting 8 Publisher and Subscribers Evaluation ... "
+echo "Starting 4 Publisher and Subscribers Evaluation ... "
 
 #header for delay file
 
 echo "Clients, Delay (ms)" >> evaluation/delay.csv
-echo -n "16 Pubs and Subs " > n_of_subs.txt
+echo -n "4 Pubs and Subs " > n_of_subs.txt
 sleep 4
 
-for i in {1..16}
+for i in {1..4}
 do
     #process client
     #python3 sub_re_enc_TOPIC_A.py  &
@@ -47,7 +47,7 @@ echo "Starting..."
 
 sleep 2
 python3 start_evaluation_time.py
-for i in {1..16}
+for i in {1..4}
 do
     #process client
     ./run_publisher.sh &
