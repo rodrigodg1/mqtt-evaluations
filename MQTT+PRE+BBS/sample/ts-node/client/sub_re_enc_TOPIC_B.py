@@ -7,7 +7,7 @@ from umbral import generate_kfrags
 from umbral import encrypt, decrypt_original, reencrypt
 from umbral import SecretKey, Signer
 from umbral import decrypt_reencrypted
-
+import time
 
 broker = "localhost"
 broker_port = 8883
@@ -24,8 +24,8 @@ def on_connect(client, userdata, flags, rc):
 
     
 
-# The callback for when a PUBLISH message is received from the server.
-
+def get_current_time():
+    return time.time()
 
 #is delegation key send via particular topic between pre and publisher ?
 def on_message(client, userdata, msg):
@@ -45,7 +45,7 @@ def on_message(client, userdata, msg):
 
     #print(msg.topic+" "+str(msg.payload))
     received_data = json.loads(msg.payload)
-    print("RECEIVED DATA: ", received_data)
+    #print("RECEIVED DATA: ", received_data)
 
 
     temperature = received_data['Temperature_ReEnc']
@@ -63,6 +63,7 @@ def on_message(client, userdata, msg):
 
     #pprint.pprint(received_data)
 
+    publisher_start_time = received_data['Publisher_Timestamp']
 
 
     # Encrypt data with Alice's public key.
@@ -149,60 +150,13 @@ def on_message(client, userdata, msg):
 
 
 
+    end_time = get_current_time()
+    delay = end_time - publisher_start_time
 
 
-
-    end_time =  datetime.now()
-    
-
-    publisher_start_time = received_data['Publisher_Timestamp']
-    publisher_start_time = publisher_start_time.split(" ")
-    publisher_start_time = publisher_start_time[1].split(":")
-    publisher_start_time_minute = publisher_start_time[1]
-    publisher_start_time_seconds = publisher_start_time[2]
-
-
-    end_time= str(datetime.now())
-    end_time = end_time.split(" ")
-    end_time = end_time[1].split(":")
-    end_time_minute = end_time[1]
-    end_time_seconds = end_time[2]
-
-
-    delay_minutes = float(end_time_minute) - float(publisher_start_time_minute)
-    delay_seconds = float(end_time_seconds) - float(publisher_start_time_seconds)
-
-    #delay = end_time - start_time
-    #print(publisher_start_time)
-    #print(publisher_start_time_minute)
-    #print(publisher_start_time_seconds)
-
-
-    #print(end_time)
-    #print(end_time_minute)
-   # print(end_time_seconds)
-    
-
-   # pprint.pprint(all_data)
-
-    #print("Delay: ", delay_seconds*1000 ," ms")
-
-    delay_ms = delay_seconds*1000
-    delay_ms = "%.2f" %delay_ms
-
-    #print(delay_ms)
-
-
-    f = open("n_of_subs.txt", "r")
-    #print(f.read())
-    n_of_subs = f.read()
-
-
-    n_of_subs_delay_ms = f"{n_of_subs},{delay_ms}"
-    n_of_subs_delay_ms = str(n_of_subs_delay_ms)
 
     f = open("evaluation/delay.csv", "a")
-    f.write(str(n_of_subs_delay_ms))
+    f.write(str(round(delay,3)))
     f.write("\n")
     f.close()
 
@@ -211,7 +165,7 @@ def on_message(client, userdata, msg):
 
     #end time of received transaction
     f = open("evaluation/end_evaluation_time.txt", "a")
-    f.write(str(datetime.now()))
+    f.write(str(end_time))
     f.write("\n")
     f.close()
 

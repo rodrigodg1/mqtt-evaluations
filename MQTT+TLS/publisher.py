@@ -6,6 +6,8 @@ import json
 import string
 import random
 import os
+
+import time
   
 
 
@@ -26,6 +28,16 @@ client.tls_set(ca_certs=TLS_CERT_PATH, certfile=client_cert,
 
 
 client.tls_insecure_set(True)
+
+
+
+
+def get_current_time():
+    return time.time()
+
+
+
+
 
 
 client.connect(broker_endpoint, port, 60)
@@ -53,7 +65,7 @@ id = f.read()
 
 
 
-now = datetime.now()
+now = get_current_time()
 
 
 temperature = '78'
@@ -68,7 +80,7 @@ all_data = {
     "GPS_Lat": GPS_Lat,
     "GPS_Long": GPS_Long,
     "Suburb": Suburb,
-    "Publisher_Timestamp":str(now)
+    "Publisher_Timestamp":now
 }
 
 

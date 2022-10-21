@@ -1,3 +1,6 @@
+from tracemalloc import start
+
+
 file = open("evaluation/delay.csv", "r")
 line_count = 0
 for line in file:
@@ -7,7 +10,7 @@ file.close()
 
 
 #without header
-total_transactions = line_count
+total_transactions = line_count - 1
 #print(line_count-1)
 
 
@@ -20,32 +23,11 @@ end_time = f.readlines()[-1]
 
 
 
+start_time = float(start_time)
+end_time = float(end_time)
 
-publisher_start_time = start_time.split(" ")
-publisher_start_time = publisher_start_time[1].split(":")
-publisher_start_time_minute = publisher_start_time[1]
-publisher_start_time_seconds = publisher_start_time[2]
-
-
-
-end_time = end_time.split(" ")
-end_time = end_time[1].split(":")
-end_time_minute = end_time[1]
-end_time_seconds = end_time[2]
-
-
-delay_minutes = float(end_time_minute) - float(publisher_start_time_minute)
-delay_seconds = float(end_time_seconds) - float(publisher_start_time_seconds)
-
-
-
-delay_ms = delay_seconds*1000
-delay_ms = "%.2f" %delay_ms
-
-
-total_delay_in_s = (delay_minutes*60) + delay_seconds
-
+delay = end_time - start_time
 
 print("Total Transactions: ",total_transactions)
-print("Total Time (s): ",total_delay_in_s)
-print("TPS:", total_transactions/total_delay_in_s)
+print("Total Evaluation Time (s): ",delay)
+print("TPS:", (total_transactions/delay))

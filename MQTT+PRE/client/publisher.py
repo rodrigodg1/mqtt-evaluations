@@ -7,6 +7,9 @@ import json
 import pickle
 from datetime import datetime
 import os
+import time
+import asyncio
+
 
 
 
@@ -33,6 +36,10 @@ sub_b_secret_key = SecretKey.random()
 sub_b_public_key = sub_b_secret_key.public_key()
 
 
+def get_current_time():
+    t = time.time()
+    return t
+
 pid = os.getpid()
 
 f = open("transaction_id.txt", "w")
@@ -45,10 +52,11 @@ id = f.read()
 
 
 
-now = datetime.now()
+#now = datetime.now()
 
 
-# Encrypt data with Alice's public key.
+
+    # Encrypt data with Alice's public key.
 
 temperature = '78'
 temperature = temperature.encode()
@@ -79,10 +87,10 @@ capsule_suburb, suburb_ciphertext = encrypt(alices_public_key, Suburb)
 
 #create a delegation key for sub B
 kfrags_sub_B = generate_kfrags(delegating_sk=alices_secret_key,
-                         receiving_pk=sub_b_public_key,
-                         signer=alices_signer,
-                         threshold=1,
-                         shares=1)
+                        receiving_pk=sub_b_public_key,
+                        signer=alices_signer,
+                        threshold=1,
+                        shares=1)
 
 
 '''
@@ -97,6 +105,10 @@ temp_suburb_data = {
 }
 '''
 
+
+now =  get_current_time()
+#print("StartTIME", now)
+
 temp_with_gps_data = {
     "id": id,
     "Temperature": str(temp_ciphertext),
@@ -109,7 +121,7 @@ temp_with_gps_data = {
     "Capsule_GPS_lat": str(capsule_gps_lat),
     "Capsule_GPS_long": str(capsule_gps_long),
     "Capsule_Suburb": str(capsule_suburb),
-    "Publisher_Timestamp":str(now)
+    "Publisher_Timestamp":now
 
 
 }
@@ -123,4 +135,5 @@ temp_with_gps_data = json.dumps(temp_with_gps_data)
 #publish.single("temp_with_suburb",temp_suburb_data,hostname=broker, port=broker_port)
 
 publish.single("temp_with_gps",temp_with_gps_data,hostname=broker, port=broker_port)
+
 #publish.single("teste2", "hi",hostname=broker, port=broker_port)

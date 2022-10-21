@@ -62,12 +62,12 @@ const main = async () => {
     client.subscribe("alldata");
 
     client.on("message", async function (topic, message) {
-      console.log("\nReceived Data:");
+      //console.log("\nReceived Data:");
 
       //console.log(message.toString())
 
       const received_data_from_publisher = JSON.parse(message.toString());
-      console.log(received_data_from_publisher);
+      //console.log(received_data_from_publisher);
 
       const temperature = received_data_from_publisher["Temperature"];
       const suburb = received_data_from_publisher["Suburb"];
@@ -81,6 +81,7 @@ const main = async () => {
       const timestamp_from_publisher =
         received_data_from_publisher["Publisher_Timestamp"];
 
+          /*
       console.log("Temperature: ", temperature);
       console.log("Suburb: ", suburb);
       console.log("Latitude: ", latitude);
@@ -91,6 +92,7 @@ const main = async () => {
       console.log("CAP. Suburb: ", capsule_suburb);
       //console.log("Signature: ", signature)
       console.log("Publisher Timestamp: ", timestamp_from_publisher);
+      */
 
       const messages = [
         Uint8Array.from(Buffer.from(temperature.toString(), "utf8")),
@@ -165,7 +167,7 @@ const main = async () => {
         nonce: Uint8Array.from(Buffer.from("nonce", "utf8")),
       });
       //verify proof authenticity
-      console.log("Proof all Items Verification: ",isProofVerified_All_Items )
+      //console.log("Proof all Items Verification: ",isProofVerified_All_Items )
 
 
       //create a object with version 2 to send to the subscribers
@@ -191,7 +193,7 @@ const main = async () => {
       // second publication, all data with derived proof
       client.publish("temp_with_gps", temp_with_gps_json);
 
-      console.log("Published !");
+      //console.log("Published !");
     });
   } catch (error) {
     console.error(error);

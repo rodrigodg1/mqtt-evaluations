@@ -16,15 +16,14 @@ sleep 3
 
 
 #header for delay file
-echo "PID, Clients, Delay (ms)" >> evaluation/delay.csv
-echo -n "8 Pubs and Subs " > n_of_subs.txt
+echo "Delay (ms)" >> evaluation/delay.csv
+#echo -n "8 Pubs and Subs " > n_of_subs.txt
 
 
+START=1
+N_PUB_SUB=16
 
-
-
-#18 subs process
-for i in {1..4}
+for (( c=$START; c<=$N_PUB_SUB; c++ ))
 do
     #process client
     python3 subscriber.py  &
@@ -34,15 +33,14 @@ do
 done
 
 
-
-echo "Starting 4 Publisher and Subscribers Evaluation ... "
+echo "Starting ${N_PUB_SUB} Publisher and Subscribers Evaluation ... "
 
 
 sleep 4
 
 
 python3 start_evaluation_time.py
-for i in {1..4}
+for (( c=$START; c<=$N_PUB_SUB; c++ ))
 do
     #process client
     ./run_publisher.sh &

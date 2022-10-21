@@ -129,6 +129,7 @@ def on_message(client, userdata, msg):
         #"Capsule_Suburb": str(capsule_suburb),
         "Publisher_Timestamp": received_data['Publisher_Timestamp']
     }
+    #print(received_data['Publisher_Timestamp'])
 
     
 

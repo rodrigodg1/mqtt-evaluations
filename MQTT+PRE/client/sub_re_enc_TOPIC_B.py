@@ -7,6 +7,7 @@ from umbral import generate_kfrags
 from umbral import encrypt, decrypt_original, reencrypt
 from umbral import SecretKey, Signer
 from umbral import decrypt_reencrypted
+import time
 
 
 broker = "localhost"
@@ -25,6 +26,10 @@ def on_connect(client, userdata, flags, rc):
     
 
 # The callback for when a PUBLISH message is received from the server.
+
+def get_current_time():
+    return time.time()
+
 
 
 #is delegation key send via particular topic between pre and publisher ?
@@ -146,75 +151,16 @@ def on_message(client, userdata, msg):
     long_gps = received_data['GPS_Long_ReEnc']
     #capsule_gps_long = received_data['Capsule_GPS_long']
     suburb = received_data['Suburb_ReEnc']
-    #capsule_sub_urb = received_data['Capsule_Suburb']
-    #proof_all_items = all_data['Proof_All_Items']
-    publisher_time_stamp = received_data['Publisher_Timestamp']
-    
-    #server_label = all_data['Server']
 
-    #pprint.pprint(received_data)
-
-    end_time =  datetime.now()
-    
-    #2022-10-17 11:25:35.358969
     publisher_start_time = received_data['Publisher_Timestamp']
-   # print("Start Time:", publisher_start_time)
-    publisher_start_time = publisher_start_time.split(" ")
-    publisher_start_time = publisher_start_time[1].split(":")
-    publisher_start_time_minute = publisher_start_time[1]
-    #print("Start Time MINUTE:", publisher_start_time_minute)
-    publisher_start_time_seconds = publisher_start_time[2]
-   # print("Start Time SECONDS:", publisher_start_time_seconds)
 
-
-    end_time= str(datetime.now())
-    #print("End Time:", end_time)
-    end_time = end_time.split(" ")
-    end_time = end_time[1].split(":")
-    end_time_minute = end_time[1]
-    #print("End Time MINUTE:", end_time_minute)
-    end_time_seconds = end_time[2]
-    #print("End Time SECONDS:", end_time_seconds)
-
-
-    delay_minutes = float(end_time_minute) - float(publisher_start_time_minute)
-    delay_seconds = float(end_time_seconds) - float(publisher_start_time_seconds)
-
-    #delay = end_time - start_time
-    #print(publisher_start_time)
-    #print(publisher_start_time_minute)
-    #print(publisher_start_time_seconds)
-
-
-    #print(end_time)
-    #print(end_time_minute)
-   # print(end_time_seconds)
-    
-
-   # pprint.pprint(all_data)
-
-    #print("Delay: ", delay_seconds*1000 ," ms")
-
-    delay_ms = delay_seconds*1000
-    delay_ms = "%.2f" %delay_ms
-
-    print("Delay (ms): ",delay_ms) 
-
-    #print("\n")
-
-
-
-    f = open("n_of_subs.txt", "r")
-    #print(f.read())
-    n_of_subs = f.read()
-
-
-    n_of_subs_delay_ms = f"{publisher_id_transaction},{n_of_subs},{delay_ms}"
-    n_of_subs_delay_ms = str(n_of_subs_delay_ms)
+    end_time = get_current_time()
+    delay = end_time - publisher_start_time
+  
 
     
     f = open("evaluation/delay.csv", "a")
-    f.write(str(n_of_subs_delay_ms))
+    f.write(str(round(delay,3)))
     f.write("\n")
     f.close()
 
@@ -224,13 +170,9 @@ def on_message(client, userdata, msg):
 
     #end time of received transaction
     f = open("evaluation/end_evaluation_time.txt", "a")
-    f.write(str(datetime.now()))
+    f.write(str(time.time()))
     f.write("\n")
     f.close()
-
-
-
-
 
 
 

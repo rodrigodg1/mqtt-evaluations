@@ -6,7 +6,7 @@ import paho.mqtt.publish as publish
 import json
 import pickle
 from datetime import datetime
-
+import time
 
 
 
@@ -32,6 +32,11 @@ sub_a_public_key = sub_a_secret_key.public_key()
 sub_b_secret_key = SecretKey.random()
 sub_b_public_key = sub_b_secret_key.public_key()
 
+
+
+def get_current_time():
+    t = time.time()
+    return t
 
 
 temperature = '78'
@@ -74,7 +79,7 @@ kfrags_sub_B = generate_kfrags(delegating_sk=alices_secret_key,
 
 
 #START TIME STAMP (ENCRYPTION IN CALCULATED IN THE END (SUBSCRIBER))
-now = datetime.now()
+now =  get_current_time()
 
 
 '''
@@ -101,7 +106,7 @@ all_data = {
     "Capsule_GPS_lat": str(capsule_gps_lat),
     "Capsule_GPS_long": str(capsule_gps_long),
     "Capsule_Suburb": str(capsule_suburb),
-    "Publisher_Timestamp":str(now)
+    "Publisher_Timestamp":now
 }
 #print(all_data)
 

@@ -70,13 +70,13 @@ const main = async () => {
 
 
     client.on("message", async function (topic, message) {
-      console.log("\nReceived Data:")
+      //console.log("\nReceived Data:")
 
       //console.log(message.toString())
       
       const received_data_from_publisher = JSON.parse(message.toString());
 
-      console.log(received_data_from_publisher)
+      //console.log(received_data_from_publisher)
 
       
       const temperature = received_data_from_publisher["Temperature"];
@@ -128,7 +128,7 @@ const main = async () => {
       messages: messages.slice(0, 4),
       nonce: Uint8Array.from(Buffer.from("nonce", "utf8")),
     });
-    console.log("Proof all Items: ",isProofVerified_All_Items )
+    //console.log("Proof all Items: ",isProofVerified_All_Items )
 
     
     */
